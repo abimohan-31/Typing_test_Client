@@ -1,26 +1,196 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #090a0f;
+  --foreground: #f8fafc;
+
+  --card: #0e111a;
+  --card-foreground: #f8fafc;
+
+  --popover: #0e111a;
+  --popover-foreground: #f8fafc;
+
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+
+  --accent: #312e81;
+  --accent-foreground: #f8fafc;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #6366f1;
+
+  --radius: 0.75rem;
+
+  --correct: #10b981;
+  --incorrect: #ef4444;
+  --untyped: #64748b;
+  --caret: #6366f1;
 }
 
+/* Base resets & layout */
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+}
+
+/* Premium Typography adjustments */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-geist-sans), sans-serif;
+  letter-spacing: -0.025em;
+}
+
+/* Custom typing engine animations and classes */
+.typing-container {
+  position: relative;
+  line-height: 2.2rem;
+  font-size: 1.5rem;
+  word-spacing: 0.15em;
+  outline: none;
+}
+
+.char {
+  position: relative;
+  transition: color 0.1s ease, background-color 0.1s ease;
+  border-radius: 2px;
+}
+
+.char.untyped {
+  color: var(--untyped);
+}
+
+.char.correct {
+  color: var(--correct);
+}
+
+.char.incorrect {
+  color: var(--incorrect);
+  background-color: rgba(239, 68, 68, 0.15);
+  border-bottom: 2px solid var(--incorrect);
+}
+
+.char.current {
+  color: #ffffff;
+  background-color: rgba(99, 102, 241, 0.15);
+}
+
+/* Caret Tracking */
+.caret-cursor {
+  position: absolute;
+  width: 2px;
+  height: 1.8rem;
+  background-color: var(--caret);
+  border-radius: 1px;
+  box-shadow: 0 0 8px var(--caret);
+  transition: left 0.08s cubic-bezier(0.1, 0.9, 0.2, 1), top 0.08s cubic-bezier(0.1, 0.9, 0.2, 1);
+  animation: blink 1s infinite alternate;
+}
+
+.caret-cursor.typing {
+  animation: none;
+}
+
+@keyframes blink {
+  0%, 20% { opacity: 1; }
+  80%, 100% { opacity: 0; }
+}
+
+/* Sleek glassmorphism utilities */
+.glass {
+  background: rgba(14, 17, 26, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-hover:hover {
+  background: rgba(14, 17, 26, 0.85);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Custom Scrollbar for dashboards */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Keyframes for smooth animations */
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Focus mode transitions */
+.focus-fade {
+  transition: opacity 0.5s ease-in-out;
+}
+.focus-fade.active {
+  opacity: 0.03;
+  pointer-events: none;
 }
