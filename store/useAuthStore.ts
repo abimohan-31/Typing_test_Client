@@ -56,12 +56,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           userId: data._id,
           name: data.name,
           groupId: data.groupId || null,
+          createdAt: "",
+          updatedAt: "",
         };
       } else if (data.role === "team-leader") {
         profileObj = {
           _id: "",
           userId: data._id,
           name: data.name,
+          createdAt: "",
+          updatedAt: "",
         };
       }
 
@@ -106,6 +110,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         userId: data._id,
         name: data.name,
         groupId: null,
+        createdAt: "",
+        updatedAt: "",
       };
 
       set({
@@ -143,6 +149,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         _id: "",
         userId: data._id,
         name: data.name,
+        createdAt: "",
+        updatedAt: "",
       };
 
       set({
@@ -187,7 +195,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   checkAuth: async () => {
     set({ isChecking: true, error: null });
     try {
-      const response = await api.get<ApiResponse>("/users/me");
+      const response = await api.get<ApiResponse>("/users/me", {
+        skipAuthInterceptor: true,
+      });
       const { user, profile } = response.data.data;
 
       set({

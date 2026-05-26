@@ -22,7 +22,8 @@ api.interceptors.response.use(
       "An unexpected error occurred";
     
     // Log token failures or expired sessions, which can trigger auth store resets
-    if (error.response?.status === 401) {
+    // Skip dispatching event for auth check requests to prevent infinite loops
+    if (error.response?.status === 401 && !error.config?.skipAuthInterceptor) {
       if (typeof window !== "undefined") {
         // Trigger event or store action if needed
         window.dispatchEvent(new Event("auth-unauthorized"));
