@@ -9,13 +9,13 @@ interface SocketState {
     duration: number; // in seconds
   } | null;
   timeLeft: number; // in seconds
-  participantsProgress: Record<string, { wpm: number; accuracy: number; name?: string }>;
+  participantsProgress: Record<string, { wpm: number; accuracy: number; name?: string; errors?: number }>;
   liveResults: Array<SocketNewResultPayload>;
 
   setConnected: (connected: boolean) => void;
   startActiveSession: (text: string, duration: number, sessionId?: string) => void;
   setTimeLeft: (timeLeft: number) => void;
-  updateParticipantProgress: (userId: string, wpm: number, accuracy: number, name?: string) => void;
+  updateParticipantProgress: (userId: string, wpm: number, accuracy: number, name?: string, errors?: number) => void;
   addLiveResult: (result: SocketNewResultPayload) => void;
   clearSessionState: () => void;
 }
@@ -38,10 +38,15 @@ export const useSocketStore = create<SocketState>((set) => ({
 
   setTimeLeft: (timeLeft) => set({ timeLeft }),
 
-  updateParticipantProgress: (userId, wpm, accuracy, name) => set((state) => ({
+  updateParticipantProgress: (userId, wpm, accuracy, name, errors) => set((state) => ({
     participantsProgress: {
       ...state.participantsProgress,
-      [userId]: { wpm, accuracy, name: name || state.participantsProgress[userId]?.name || "Student" },
+      [userId]: {
+        wpm,
+        accuracy,
+        name: name || state.participantsProgress[userId]?.name || "Student",
+        errors: errors ?? state.participantsProgress[userId]?.errors,
+      },
     },
   })),
 

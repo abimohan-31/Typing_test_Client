@@ -6,7 +6,7 @@ export const Table: React.FC<React.HTMLAttributes<HTMLTableElement>> = ({
   className,
   ...props
 }) => (
-  <div className="w-full overflow-x-auto rounded-lg border border-slate-800 bg-[#0e111a]/50">
+  <div className="w-full overflow-x-auto rounded-lg border border-panel-border bg-card/50">
     <table className={twMerge("w-full text-sm text-left text-slate-300", className)} {...props} />
   </div>
 );
@@ -16,7 +16,7 @@ export const TableHeader: React.FC<React.HTMLAttributes<HTMLTableSectionElement>
   ...props
 }) => (
   <thead
-    className={twMerge("text-xs font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800 bg-[#0f121d]", className)}
+    className={twMerge("text-xs font-semibold uppercase tracking-wider text-slate-400 border-b border-panel-border bg-panel-elevated", className)}
     {...props}
   />
 );
@@ -24,14 +24,14 @@ export const TableHeader: React.FC<React.HTMLAttributes<HTMLTableSectionElement>
 export const TableBody: React.FC<React.HTMLAttributes<HTMLTableSectionElement>> = ({
   className,
   ...props
-}) => <tbody className={twMerge("divide-y divide-slate-800/60 bg-[#0e111a]/20", className)} {...props} />;
+}) => <tbody className={twMerge("divide-y divide-panel-border/60 bg-card/20", className)} {...props} />;
 
 export const TableRow: React.FC<React.HTMLAttributes<HTMLTableRowElement>> = ({
   className,
   ...props
 }) => (
   <tr
-    className={twMerge("hover:bg-[#1e293b]/10 transition-colors duration-150", className)}
+    className={twMerge("hover:bg-panel-surface/50 transition-colors duration-150", className)}
     {...props}
   />
 );

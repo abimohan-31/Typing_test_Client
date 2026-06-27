@@ -33,12 +33,12 @@ export const Dialog: React.FC<DialogProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm fade-in">
       <div
-        className={`relative w-full rounded-xl border border-slate-800 bg-[#0e111a] p-6 shadow-2xl transition-all duration-300 ${
+        className={`relative w-full rounded-xl border border-panel-border bg-card p-6 shadow-2xl transition-all duration-300 ${
           size === "sm" ? "max-w-md" : size === "lg" ? "max-w-3xl" : "max-w-lg"
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800/80">
+        <div className="flex items-center justify-between pb-4 border-b border-panel-border/80">
           <h2 className="text-lg font-semibold text-white">{title}</h2>
           <Button
             variant="ghost"

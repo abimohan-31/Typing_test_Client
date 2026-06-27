@@ -75,10 +75,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#090a0f] p-4 relative overflow-hidden font-sans">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4 relative overflow-hidden font-sans">
       {/* Background radial effects */}
-      <div className="absolute top-[-10%] left-[-15%] w-[60%] h-[60%] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-15%] w-[60%] h-[60%] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-15%] w-[60%] h-[60%] rounded-full bg-brand/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-15%] w-[60%] h-[60%] rounded-full bg-brand/5 blur-[120px] pointer-events-none" />
 
       <div className="w-full max-w-md z-10 relative">
         <Link href="/" className="inline-flex items-center space-x-2 text-sm text-slate-400 hover:text-white mb-6 transition-all group">
@@ -86,12 +86,12 @@ export default function LoginPage() {
           <span>Back to Home</span>
         </Link>
 
-        <Card className="glass shadow-2xl border-slate-800">
+        <Card className="glass shadow-2xl border-panel-border">
           <CardHeader className="text-center space-y-2 pb-4">
-            <div className="mx-auto h-12 w-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/35 mb-2">
+            <div className="mx-auto h-12 w-12 rounded-2xl bg-brand flex items-center justify-center shadow-lg shadow-brand/35 mb-2">
               <Keyboard className="h-6 w-6 text-white animate-pulse" />
             </div>
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-white to-indigo-300 bg-clip-text text-transparent">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-white to-brand-light bg-clip-text text-transparent">
               Welcome Back
             </CardTitle>
             <CardDescription className="text-slate-400">
@@ -138,7 +138,7 @@ export default function LoginPage() {
 
             <div className="text-center mt-6 text-xs text-slate-500">
               <span>Don't have an account? </span>
-              <Link href="/register" className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">
+              <Link href="/register" className="font-semibold text-brand-light hover:text-brand-light transition-colors">
                 Create one now
               </Link>
             </div>

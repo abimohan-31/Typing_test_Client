@@ -22,7 +22,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           className={twMerge(
             clsx(
-              "flex h-11 w-full rounded-lg border border-slate-800 bg-[#0b0c10] px-3.5 py-2 text-sm text-slate-100 ring-offset-[#090a0f] placeholder-slate-500 transition-all duration-200 file:border-0 file:bg-transparent file:text-sm file:font-medium focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:opacity-50 disabled:pointer-events-none",
+              "flex h-11 w-full rounded-lg border border-panel-border bg-panel-base px-3.5 py-2 text-sm text-slate-100 ring-offset-background placeholder-slate-500 transition-all duration-200 file:border-0 file:bg-transparent file:text-sm file:font-medium focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand disabled:opacity-50 disabled:pointer-events-none",
               {
                 "border-red-500 focus:border-red-500 focus:ring-red-500": !!error,
               }

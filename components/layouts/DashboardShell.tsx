@@ -69,15 +69,15 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#090a0f] font-sans">
+    <div className="flex min-h-screen bg-background font-sans">
       {/* Sidebar - Desktop */}
-      <aside className="hidden md:flex flex-col w-64 glass border-r border-slate-800 m-4 rounded-2xl relative z-10">
-        <div className="flex items-center space-x-2 px-6 py-5 border-b border-slate-800/80">
-          <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/35">
+      <aside className="hidden md:flex flex-col w-64 glass border-r border-panel-border m-4 rounded-2xl relative z-10">
+        <div className="flex items-center space-x-2 px-6 py-5 border-b border-panel-border/80">
+          <div className="h-9 w-9 rounded-xl bg-brand flex items-center justify-center shadow-lg shadow-brand/35">
             <Keyboard className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-md font-bold bg-gradient-to-r from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent">
+            <h1 className="text-md font-bold bg-gradient-to-r from-white via-brand-light/50 to-brand-light bg-clip-text text-transparent">
               KeySpeed Sync
             </h1>
             <p className="text-[10px] text-slate-500 font-semibold tracking-widest uppercase">Typing Hub</p>
@@ -94,7 +94,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
                 href={link.href}
                 className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                   isActive
-                    ? "bg-indigo-600/10 text-white border-l-2 border-indigo-500 shadow-sm"
+                    ? "bg-brand/10 text-white border-l-2 border-brand shadow-sm"
                     : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/40"
                 }`}
               >
@@ -106,14 +106,14 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
         </nav>
 
         {/* Footer Profile */}
-        <div className="p-4 border-t border-slate-800/80 bg-slate-950/20 rounded-b-2xl">
+        <div className="p-4 border-t border-panel-border/80 bg-slate-950/20 rounded-b-2xl">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="h-10 w-10 rounded-full bg-slate-800 flex items-center justify-center text-indigo-400 font-bold border border-slate-700 uppercase">
+            <div className="h-10 w-10 rounded-full bg-slate-800 flex items-center justify-center text-brand-light font-bold border border-slate-700 uppercase">
               {displayName.charAt(0)}
             </div>
             <div className="overflow-hidden">
               <p className="text-sm font-semibold text-white truncate">{displayName}</p>
-              <Badge variant={user.role === "admin" ? "destructive" : user.role === "team-leader" ? "warning" : "primary"} className="mt-0.5 text-[10px] px-1.5">
+              <Badge variant={user.role === "admin" ? "admin" : user.role === "team-leader" ? "leader" : "student"} className="mt-0.5 text-[10px] px-1.5">
                 {formatRole(user.role)}
               </Badge>
             </div>
@@ -133,7 +133,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
       {/* Main Column */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Navbar */}
-        <header className="flex h-16 items-center justify-between px-6 border-b border-slate-800 bg-[#090a0f]/40 backdrop-blur-md relative z-10">
+        <header className="flex h-16 items-center justify-between px-6 border-b border-panel-border bg-background/40 backdrop-blur-md relative z-10">
           <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
@@ -160,11 +160,11 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
           {/* Right Header Controls */}
           <div className="flex items-center space-x-4">
             <div className="md:hidden flex items-center">
-              <Badge variant={user.role === "admin" ? "destructive" : user.role === "team-leader" ? "warning" : "primary"}>
+              <Badge variant={user.role === "admin" ? "admin" : user.role === "team-leader" ? "leader" : "student"}>
                 {formatRole(user.role)}
               </Badge>
             </div>
-            <div className="h-8 w-8 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-indigo-400 font-bold uppercase">
+            <div className="h-8 w-8 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-brand-light font-bold uppercase">
               {displayName.charAt(0)}
             </div>
           </div>
@@ -182,10 +182,10 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden flex">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
-          <div className="relative flex flex-col w-72 max-w-xs glass h-full border-r border-slate-800 p-6 z-10 transition-all">
-            <div className="flex items-center justify-between pb-6 border-b border-slate-800">
+          <div className="relative flex flex-col w-72 max-w-xs glass h-full border-r border-panel-border p-6 z-10 transition-all">
+            <div className="flex items-center justify-between pb-6 border-b border-panel-border">
               <div className="flex items-center space-x-2">
-                <Keyboard className="h-6 w-6 text-indigo-500" />
+                <Keyboard className="h-6 w-6 text-brand" />
                 <span className="text-md font-bold text-white">KeySpeed Sync</span>
               </div>
               <Button
@@ -208,7 +208,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                       isActive
-                        ? "bg-indigo-600/10 text-white border-l-2 border-indigo-500 shadow-sm"
+                        ? "bg-brand/10 text-white border-l-2 border-brand shadow-sm"
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/40"
                     }`}
                   >
@@ -219,7 +219,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
               })}
             </nav>
 
-            <div className="pt-4 border-t border-slate-800">
+            <div className="pt-4 border-t border-panel-border">
               <Button
                 variant="ghost"
                 onClick={logout}

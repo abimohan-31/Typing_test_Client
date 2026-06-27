@@ -52,12 +52,10 @@ export default function LeaderDashboard() {
             <h1 className="text-3xl font-bold tracking-tight text-white">Team Leader Overview</h1>
             <p className="text-slate-400 mt-1">Manage your practice groups and monitor student performance.</p>
           </div>
-          <Link href="/leader/groups">
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              New Group
-            </Button>
-          </Link>
+          <Button href="/leader/groups">
+            <Plus className="mr-2 h-4 w-4" />
+            New Group
+          </Button>
         </div>
 
         {error && (
@@ -86,7 +84,7 @@ export default function LeaderDashboard() {
               <Card hoverable>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-slate-400">Total Students</CardTitle>
-                  <Users className="h-4 w-4 text-indigo-500" />
+                  <Users className="h-4 w-4 text-brand" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">{totalStudents}</div>
@@ -108,7 +106,7 @@ export default function LeaderDashboard() {
               <Card hoverable>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-slate-400">Avg. Student Speed</CardTitle>
-                  <Gauge className="h-4 w-4 text-indigo-400" />
+                  <Gauge className="h-4 w-4 text-brand-light" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">48 WPM</div>
@@ -127,7 +125,7 @@ export default function LeaderDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-md flex items-center">
-                  <TrendingUp className="h-4.5 w-4.5 text-indigo-400 mr-2" />
+                  <TrendingUp className="h-4.5 w-4.5 text-brand-light mr-2" />
                   Team WPM Progress (Weekly Avg)
                 </CardTitle>
                 <CardDescription>Aggregate performance of all your students over the past week.</CardDescription>

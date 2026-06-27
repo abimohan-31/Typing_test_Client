@@ -78,8 +78,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       // Connect real-time socket immediately
       socket.connect();
-      if (data.groupId && data.role === "student") {
-        socket.emit("joinGroup", { groupId: data.groupId });
+      const groupId = data.groupId?._id || data.groupId;
+      if (groupId && data.role === "student") {
+        socket.emit("joinGroup", { groupId: groupId.toString() });
       }
 
       return userObj;
@@ -214,7 +215,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       const groupId = profile?.groupId?._id || profile?.groupId;
       if (groupId) {
-        socket.emit("joinGroup", { groupId });
+        socket.emit("joinGroup", { groupId: groupId.toString() });
       }
     } catch (err) {
       set({

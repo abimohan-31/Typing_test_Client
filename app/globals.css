@@ -28,6 +28,23 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
 
+  --color-brand: var(--brand);
+  --color-brand-light: var(--brand-light);
+  --color-brand-dark: var(--brand-dark);
+
+  --color-panel: var(--panel-base);
+  --color-panel-elevated: var(--panel-elevated);
+  --color-panel-surface: var(--panel-surface);
+  --color-panel-border: var(--panel-border);
+
+  --color-role-leader: var(--role-leader);
+  --color-role-student: var(--role-student);
+  --color-role-admin: var(--role-admin);
+
+  --color-warning: var(--status-warning);
+  --color-typing-correct: var(--correct);
+  --color-typing-incorrect: var(--incorrect);
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -37,40 +54,63 @@
 }
 
 :root {
-  --background: #090a0f;
-  --foreground: #f8fafc;
+  /* Primary brand — burnt orange */
+  --brand: #d4560a;
+  --brand-light: #e87a3a;
+  --brand-dark: #a84308;
 
-  --card: #0e111a;
-  --card-foreground: #f8fafc;
+  /* Warm neutrals */
+  --background: #f0e7da;
+  --foreground: #f0ece3;
 
-  --popover: #0e111a;
-  --popover-foreground: #f8fafc;
+  --card: #b4a484;
+  --card-foreground: #f0ece3;
 
-  --primary: #6366f1;
-  --primary-foreground: #ffffff;
+  --popover: #cfc8b8;
+  --popover-foreground: #f0ece3;
 
-  --secondary: #1e293b;
-  --secondary-foreground: #f8fafc;
+  --primary: #d4560a;
+  --primary-foreground: #f5f0e8;
 
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
+  --secondary: #ebcb9b;
+  --secondary-foreground: #f0ece3;
 
-  --accent: #312e81;
-  --accent-foreground: #f8fafc;
+  --muted: #2a2620;
+  --muted-foreground: #9a8c70;
 
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
+  --accent: #bdb4a4;
+  --accent-foreground: #f0ece3;
 
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #6366f1;
+  --destructive: #dc2626;
+  --destructive-foreground: #f5f0e8;
+
+  --border: #2e2b24;
+  --input: #211e1a;
+  --ring: #d4560a;
 
   --radius: 0.75rem;
 
-  --correct: #10b981;
-  --incorrect: #ef4444;
-  --untyped: #64748b;
-  --caret: #6366f1;
+  /* Role colors */
+  --role-leader: #3b82f6;
+  --role-student: #22c55e;
+  --role-admin: #d4560a;
+
+  /* Status */
+  --status-warning: #f59e0b;
+  --status-error: #dc2626;
+
+  /* Dark panel tones */
+  --panel-base: #12100e;
+  --panel-elevated: #1a1714;
+  --panel-surface: #211e1a;
+  --panel-border: #332f28;
+  --panel-muted: #3a352c;
+
+  /* Typing feedback */
+  --correct: #6ee7b7;
+  --incorrect: #f87171;
+  --untyped: #6a6454;
+  --caret: #d4560a;
 }
 
 /* Base resets & layout */
@@ -112,13 +152,13 @@ h1, h2, h3, h4, h5, h6 {
 
 .char.incorrect {
   color: var(--incorrect);
-  background-color: rgba(239, 68, 68, 0.15);
+  background-color: rgba(248, 113, 113, 0.15);
   border-bottom: 2px solid var(--incorrect);
 }
 
 .char.current {
-  color: #ffffff;
-  background-color: rgba(99, 102, 241, 0.15);
+  color: var(--foreground);
+  background-color: rgba(212, 86, 10, 0.15);
 }
 
 /* Caret Tracking */
@@ -144,19 +184,19 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Sleek glassmorphism utilities */
 .glass {
-  background: rgba(14, 17, 26, 0.7);
+  background: rgba(26, 23, 20, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(240, 236, 227, 0.05);
 }
 
 .glass-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .glass-hover:hover {
-  background: rgba(14, 17, 26, 0.85);
-  border-color: rgba(99, 102, 241, 0.3);
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.1);
+  background: rgba(26, 23, 20, 0.85);
+  border-color: rgba(212, 86, 10, 0.3);
+  box-shadow: 0 8px 30px rgba(212, 86, 10, 0.1);
   transform: translateY(-2px);
 }
 
@@ -169,11 +209,11 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--panel-muted);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--panel-border);
 }
 
 /* Keyframes for smooth animations */

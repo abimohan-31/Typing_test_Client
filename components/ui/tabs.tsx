@@ -16,7 +16,7 @@ export const Tabs: React.FC<TabsProps> = ({
   className,
 }) => {
   return (
-    <div className={twMerge("flex border-b border-slate-800 space-x-6", className)}>
+    <div className={twMerge("flex border-b border-panel-border space-x-6", className)}>
       {tabs.map((tab) => {
         const isActive = tab.id === activeTab;
         return (
@@ -26,8 +26,8 @@ export const Tabs: React.FC<TabsProps> = ({
             className={clsx(
               "flex items-center space-x-2 py-3 px-1 text-sm font-medium border-b-2 transition-all cursor-pointer",
               {
-                "border-indigo-500 text-white": isActive,
-                "border-transparent text-slate-400 hover:text-slate-200": !isActive,
+                "border-brand text-foreground": isActive,
+                "border-transparent text-muted-foreground hover:text-foreground": !isActive,
               }
             )}
           >

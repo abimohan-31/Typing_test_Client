@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DashboardShell } from "../../../components/layouts/DashboardShell";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
@@ -8,12 +8,27 @@ import { Input } from "../../../components/ui/input";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../../components/ui/table";
 import { Badge } from "../../../components/ui/badge";
 import api, { ApiResponse } from "../../../lib/axios";
-import { Plus, Trash2, Users, Loader2, Play } from "lucide-react";
-import { useAuthStore } from "../../../store/useAuthStore";
-import Link from "next/link";
+import { Plus, Trash2, Users, Loader2, Play, Share2 } from "lucide-react";
+import { toast } from "../../../components/ui/toast";
+
+type Group = {
+  _id: string;
+  name: string;
+  members?: unknown[];
+  activeSession?: unknown;
+};
+
+const getErrorMessage = (err: unknown, fallback: string) => {
+  if (typeof err === "object" && err !== null && "friendlyMessage" in err) {
+    const friendlyMessage = (err as { friendlyMessage?: unknown }).friendlyMessage;
+    if (typeof friendlyMessage === "string") return friendlyMessage;
+  }
+
+  return fallback;
+};
 
 export default function LeaderGroups() {
-  const [groups, setGroups] = useState<any[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -21,21 +36,25 @@ export default function LeaderGroups() {
   const [creating, setCreating] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const fetchGroups = async () => {
+  const fetchGroups = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.get<ApiResponse>("/groups/leader");
+      const response = await api.get<ApiResponse<Group[]>>("/groups/leader");
       setGroups(response.data.data);
-    } catch (err: any) {
-      setError(err.friendlyMessage || "Failed to load groups");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Failed to load groups"));
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchGroups();
-  }, []);
+    const timer = window.setTimeout(() => {
+      void fetchGroups();
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [fetchGroups]);
 
   const handleCreateGroup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,8 +65,8 @@ export default function LeaderGroups() {
       await api.post("/groups", { name: newGroupName });
       setNewGroupName("");
       await fetchGroups(); // Refresh list
-    } catch (err: any) {
-      setError(err.friendlyMessage || "Failed to create group");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Failed to create group"));
     } finally {
       setCreating(false);
     }
@@ -59,9 +78,9 @@ export default function LeaderGroups() {
     try {
       setDeletingId(id);
       await api.delete(`/groups/${id}`);
-      setGroups(groups.filter((g) => g._id !== id));
-    } catch (err: any) {
-      setError(err.friendlyMessage || "Failed to delete group");
+      setGroups((currentGroups) => currentGroups.filter((g) => g._id !== id));
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Failed to delete group"));
     } finally {
       setDeletingId(null);
     }
@@ -117,7 +136,7 @@ export default function LeaderGroups() {
               <CardContent>
                 {loading ? (
                   <div className="flex justify-center p-8">
-                    <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
+                    <Loader2 className="h-8 w-8 animate-spin text-brand" />
                   </div>
                 ) : groups.length === 0 ? (
                   <div className="text-center p-8 border border-dashed border-slate-700 rounded-lg">
@@ -126,7 +145,7 @@ export default function LeaderGroups() {
                     <p className="text-sm text-slate-500 mt-1">Create your first group to start practicing.</p>
                   </div>
                 ) : (
-                  <div className="overflow-hidden rounded-md border border-slate-800">
+                  <div className="overflow-hidden rounded-md border border-panel-border">
                     <Table>
                       <TableHeader>
                         <TableRow>
@@ -150,12 +169,22 @@ export default function LeaderGroups() {
                             </TableCell>
                             <TableCell className="text-right space-x-2">
                               {!group.activeSession && (
-                                <Link href={`/leader/sessions?groupId=${group._id}`}>
-                                  <Button variant="outline" size="sm" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500/20">
-                                    <Play className="h-4 w-4 mr-1" /> Start
-                                  </Button>
-                                </Link>
+                                <Button href={`/leader/sessions?groupId=${group._id}`} variant="outline" size="sm" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500/20">
+                                  <Play className="h-4 w-4 mr-1" /> Start
+                                </Button>
                               )}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="bg-brand/10 text-brand-light border-brand/20 hover:bg-brand-light/20"
+                                onClick={async () => {
+                                  const link = `${window.location.origin}/join/${group._id}`;
+                                  await navigator.clipboard.writeText(link);
+                                  toast("Team invite link copied successfully!");
+                                }}
+                              >
+                                <Share2 className="h-4 w-4 mr-1" /> Link
+                              </Button>
                               <Button
                                 variant="destructive"
                                 size="sm"

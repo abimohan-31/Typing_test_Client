@@ -31,11 +31,11 @@ export default function SocketProvider({
 
     function onConnect() {
       setConnected(true);
-      
-      // Auto join group room if student is in a group
-      const groupId = (profile as any)?.groupId?._id || (profile as any)?.groupId;
-      if (groupId && user?.role === "student") {
-        socket.emit("joinGroup", { groupId });
+
+      const groupId =
+        (profile as any)?.groupId?._id || (profile as any)?.groupId;
+      if (groupId) {
+        socket.emit("joinGroup", { groupId: groupId.toString() });
       }
     }
 
@@ -44,20 +44,14 @@ export default function SocketProvider({
     }
 
     function onSessionStarted(data: { text: string; duration: number; sessionId?: string }) {
-      // In backend, duration is sent as duration in minutes. In group start session, duration in seconds.
-      // In sessionSocket.js: const timerInterval = setInterval(() => { timeLeft -= 1; io.to(groupId).emit("timerSync", { timeLeft }); ... })
-      // and let timeLeft = duration * 60;
-      // That means sessionStarted duration in socket payload is minutes.
-      // Let's multiply duration * 60 to convert it to seconds!
       const durationSeconds = data.duration * 60;
-      
-      // Update Socket Store
       startActiveSession(data.text, durationSeconds, data.sessionId);
-      
-      // Update local typing engine
       setSessionText(data.text, durationSeconds);
 
-      // Instantly navigate student to the synchronized test interface
+      if (data.sessionId) {
+        socket.emit("joinSession", data.sessionId);
+      }
+
       if (user?.role === "student") {
         router.push("/student/test");
       }
@@ -67,15 +61,27 @@ export default function SocketProvider({
       setTimeLeft(data.timeLeft);
     }
 
-    function onSessionUpdate(data: { userId: string; wpm: number; accuracy: number }) {
-      updateParticipantProgress(data.userId, data.wpm, data.accuracy);
+    function onSessionUpdate(data: {
+      userId: string;
+      wpm: number;
+      accuracy: number;
+      name?: string;
+      errors?: number;
+    }) {
+      updateParticipantProgress(
+        data.userId,
+        data.wpm,
+        data.accuracy,
+        data.name,
+        data.errors,
+      );
     }
 
     function onNewResult(data: any) {
       addLiveResult({
         groupId: data.groupId,
         userId: data.userId,
-        userName: data.userName || "Student",
+        userName: data.userName || data.name || "Student",
         wpm: data.wpm,
         accuracy: data.accuracy,
       });
@@ -83,9 +89,12 @@ export default function SocketProvider({
 
     function onSessionEnded() {
       completeSession();
+      // Students must stay on the test page long enough to submit and view results.
+      // Leader/admin dashboards can clear immediately.
+      if (user?.role !== "student") {
+        clearSessionState();
+      }
     }
-
-    // Connect socket if not connected
     if (!socket.connected) {
       socket.connect();
     }
@@ -122,6 +131,7 @@ export default function SocketProvider({
     addLiveResult,
     completeSession,
     setSessionText,
+    clearSessionState,
     router,
   ]);
 

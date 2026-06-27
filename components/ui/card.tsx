@@ -16,9 +16,9 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div
       className={twMerge(
-        clsx("rounded-xl border border-slate-800 transition-all duration-300", {
+        clsx("rounded-xl border border-panel-border transition-all duration-300", {
           "glass": glass,
-          "bg-[#0e111a]/90": !glass,
+          "bg-card/90": !glass,
           "glass-hover": hoverable,
         }),
         className
@@ -66,6 +66,6 @@ export const CardFooter: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
   return (
-    <div className={twMerge("flex items-center p-6 pt-0 border-t border-slate-800/50 mt-4", className)} {...props} />
+    <div className={twMerge("flex items-center p-6 pt-0 border-t border-panel-border/50 mt-4", className)} {...props} />
   );
 };

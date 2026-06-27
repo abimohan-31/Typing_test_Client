@@ -1,8 +1,14 @@
 import axios from "axios";
 
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    skipAuthInterceptor?: boolean;
+  }
+}
+
 // Centralized Axios instance
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api",
   withCredentials: true, // Crucial for manual cookie parser on the server
   headers: {
     "Content-Type": "application/json",

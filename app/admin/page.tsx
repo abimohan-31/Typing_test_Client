@@ -79,7 +79,7 @@ export default function AdminDashboard() {
               <Card hoverable>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-slate-400">Total Members</CardTitle>
-                  <Users className="h-4 w-4 text-indigo-500" />
+                  <Users className="h-4 w-4 text-brand" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">{stats.totalUsers}</div>
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
               <Card hoverable>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-slate-400">Global Average Speed</CardTitle>
-                  <Gauge className="h-4 w-4 text-indigo-400" />
+                  <Gauge className="h-4 w-4 text-brand-light" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">{stats.averageWpm} WPM</div>
@@ -134,7 +134,7 @@ export default function AdminDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-md flex items-center">
-                    <TrendingUp className="h-4.5 w-4.5 text-indigo-400 mr-2" />
+                    <TrendingUp className="h-4.5 w-4.5 text-brand-light mr-2" />
                     WPM Speed Progression (Weekly Avg)
                   </CardTitle>
                   <CardDescription>Average performance ratings of typing contestants.</CardDescription>

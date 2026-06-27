@@ -8,22 +8,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/ca
 
 export default function AboutPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#090a0f] text-slate-100 p-6 relative overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
+    <div className="flex flex-col min-h-screen bg-background text-slate-100 p-6 relative overflow-hidden">
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand/5 blur-[120px] pointer-events-none" />
 
       {/* Header bar */}
       <header className="max-w-5xl mx-auto w-full flex items-center justify-between py-6 border-b border-slate-900 mb-12">
         <Link href="/" className="flex items-center space-x-2">
-          <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+          <div className="h-8 w-8 rounded-lg bg-brand flex items-center justify-center">
             <Keyboard className="h-4.5 w-4.5 text-white" />
           </div>
           <span className="font-bold text-md tracking-tight text-white">KeySpeed Sync</span>
         </Link>
-        <Link href="/">
-          <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
-            <ArrowLeft className="h-4 w-4 mr-2" /> Back
-          </Button>
-        </Link>
+        <Button href="/" variant="ghost" size="sm" className="text-slate-400 hover:text-white">
+          <ArrowLeft className="h-4 w-4 mr-2" /> Back
+        </Button>
       </header>
 
       {/* Main content */}
@@ -38,7 +36,7 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
           <Card>
             <CardHeader className="flex flex-row items-center space-x-4">
-              <div className="h-10 w-10 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/20">
+              <div className="h-10 w-10 rounded-lg bg-brand/10 flex items-center justify-center text-brand-light border border-brand/20">
                 <Users className="h-5 w-5" />
               </div>
               <CardTitle className="text-md">Team Synergy</CardTitle>
@@ -65,9 +63,9 @@ export default function AboutPage() {
           </Card>
         </div>
 
-        <div className="glass p-8 rounded-xl border border-slate-800 space-y-4">
+        <div className="glass p-8 rounded-xl border border-panel-border space-y-4">
           <div className="flex items-center space-x-3 mb-2">
-            <Code className="h-5 w-5 text-indigo-400" />
+            <Code className="h-5 w-5 text-brand-light" />
             <h2 className="text-lg font-bold text-white">Platform Architecture</h2>
           </div>
           <p className="text-sm text-slate-400 leading-relaxed">

@@ -36,15 +36,15 @@ export default function StudentDashboard() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white">Welcome, {studentName}</h1>
           <p className="text-slate-400 mt-1">
-            Current Group: <span className="font-semibold text-indigo-400">{groupName}</span>
+            Current Group: <span className="font-semibold text-brand-light">{groupName}</span>
           </p>
         </div>
 
         {/* Statistics Grid */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <Card hoverable className="bg-gradient-to-br from-indigo-500/10 to-transparent">
+          <Card hoverable className="bg-gradient-to-br from-brand/10 to-transparent">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-indigo-300">Highest WPM</CardTitle>
+              <CardTitle className="text-sm font-medium text-brand-light">Highest WPM</CardTitle>
               <Trophy className="h-4 w-4 text-amber-500" />
             </CardHeader>
             <CardContent>
@@ -56,7 +56,7 @@ export default function StudentDashboard() {
           <Card hoverable>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-slate-400">Avg Speed</CardTitle>
-              <Gauge className="h-4 w-4 text-indigo-400" />
+              <Gauge className="h-4 w-4 text-brand-light" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">53 <span className="text-sm text-slate-500 font-normal">WPM</span></div>
@@ -93,7 +93,7 @@ export default function StudentDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-md flex items-center">
-                  <Gauge className="h-4.5 w-4.5 text-indigo-400 mr-2" />
+                  <Gauge className="h-4.5 w-4.5 text-brand-light mr-2" />
                   Your Speed Progression
                 </CardTitle>
                 <CardDescription>Watch your words-per-minute grow over time.</CardDescription>
@@ -114,7 +114,7 @@ export default function StudentDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="divide-y divide-slate-800">
+                <div className="divide-y divide-panel-border">
                   {recentHistory.map((test) => (
                     <div key={test.id} className="flex justify-between items-center p-4 hover:bg-slate-800/50 transition-colors">
                       <div>
@@ -122,7 +122,7 @@ export default function StudentDashboard() {
                         <p className="text-xs text-slate-500">{test.duration} Test</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-bold text-indigo-400">{test.wpm} WPM</p>
+                        <p className="text-sm font-bold text-brand-light">{test.wpm} WPM</p>
                         <p className="text-xs text-slate-500">{test.accuracy}% Acc</p>
                       </div>
                     </div>

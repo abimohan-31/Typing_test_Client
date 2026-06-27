@@ -40,25 +40,25 @@ export const WpmProgressChart: React.FC<WpmChartProps> = ({ data }) => {
         <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="wpmGlow" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
-              <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
+              <stop offset="5%" stopColor="#d4560a" stopOpacity={0.4} />
+              <stop offset="95%" stopColor="#d4560a" stopOpacity={0.0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" opacity={0.5} />
-          <XAxis dataKey="label" stroke="#475569" fontSize={11} tickLine={false} />
-          <YAxis stroke="#475569" fontSize={11} tickLine={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#332f28" opacity={0.5} />
+          <XAxis dataKey="label" stroke="#6a6454" fontSize={11} tickLine={false} />
+          <YAxis stroke="#6a6454" fontSize={11} tickLine={false} />
           <Tooltip
             contentStyle={{
-              backgroundColor: "#0e111a",
-              borderColor: "#1e293b",
+              backgroundColor: "#1c1a16",
+              borderColor: "#332f28",
               borderRadius: "8px",
-              color: "#f8fafc",
+              color: "#f0ece3",
             }}
           />
           <Area
             type="monotone"
             dataKey="wpm"
-            stroke="#6366f1"
+            stroke="#d4560a"
             strokeWidth={3}
             fillOpacity={1}
             fill="url(#wpmGlow)"
@@ -83,21 +83,21 @@ export const AccuracyTrendChart: React.FC<AccuracyChartProps> = ({ data }) => {
     <div className="h-72 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" opacity={0.5} />
-          <XAxis dataKey="label" stroke="#475569" fontSize={11} tickLine={false} />
-          <YAxis domain={[50, 100]} stroke="#475569" fontSize={11} tickLine={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#332f28" opacity={0.5} />
+          <XAxis dataKey="label" stroke="#6a6454" fontSize={11} tickLine={false} />
+          <YAxis domain={[50, 100]} stroke="#6a6454" fontSize={11} tickLine={false} />
           <Tooltip
             contentStyle={{
-              backgroundColor: "#0e111a",
-              borderColor: "#1e293b",
+              backgroundColor: "#1c1a16",
+              borderColor: "#332f28",
               borderRadius: "8px",
-              color: "#f8fafc",
+              color: "#f0ece3",
             }}
           />
           <Line
             type="monotone"
             dataKey="accuracy"
-            stroke="#10b981"
+            stroke="#6ee7b7"
             strokeWidth={3}
             dot={{ r: 4, strokeWidth: 2 }}
             activeDot={{ r: 6 }}
@@ -122,20 +122,20 @@ export const LeaderboardBarChart: React.FC<LeaderboardChartProps> = ({ data }) =
     <div className="h-72 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" opacity={0.3} horizontal={false} />
-          <XAxis type="number" stroke="#475569" fontSize={11} tickLine={false} />
-          <YAxis dataKey="name" type="category" stroke="#475569" fontSize={11} width={80} tickLine={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#332f28" opacity={0.3} horizontal={false} />
+          <XAxis type="number" stroke="#6a6454" fontSize={11} tickLine={false} />
+          <YAxis dataKey="name" type="category" stroke="#6a6454" fontSize={11} width={80} tickLine={false} />
           <Tooltip
             contentStyle={{
-              backgroundColor: "#0e111a",
-              borderColor: "#1e293b",
+              backgroundColor: "#1c1a16",
+              borderColor: "#332f28",
               borderRadius: "8px",
-              color: "#f8fafc",
+              color: "#f0ece3",
             }}
           />
           <Bar
             dataKey="wpm"
-            fill="#a78bfa"
+            fill="#e87a3a"
             radius={[0, 4, 4, 0]}
             name="WPM Score"
             barSize={18}
