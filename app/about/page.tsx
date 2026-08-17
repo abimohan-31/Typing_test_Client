@@ -17,7 +17,7 @@ export default function AboutPage() {
           <div className="h-8 w-8 rounded-lg bg-brand flex items-center justify-center">
             <Keyboard className="h-4.5 w-4.5 text-white" />
           </div>
-          <span className="font-bold text-md tracking-tight text-white">KeySpeed Sync</span>
+          <span className="font-bold text-md tracking-tight text-white">Key-Loop</span>
         </Link>
         <Button href="/" variant="ghost" size="sm" className="text-slate-400 hover:text-white">
           <ArrowLeft className="h-4 w-4 mr-2" /> Back
@@ -27,9 +27,9 @@ export default function AboutPage() {
       {/* Main content */}
       <main className="flex-1 max-w-3xl mx-auto w-full space-y-12">
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white">About KeySpeed Sync</h1>
+          <h1 className="text-4xl font-extrabold tracking-tight text-white">About Key-Loop</h1>
           <p className="text-lg text-slate-400 max-w-xl mx-auto">
-            KeySpeed Sync was designed as a modern typing pedagogy tool to enhance keyboard mechanics, speed, and group synchronization.
+            Key-Loop was designed as a modern typing pedagogy tool to enhance keyboard mechanics, speed, and group synchronization.
           </p>
         </div>
 
@@ -75,7 +75,7 @@ export default function AboutPage() {
       </main>
 
       <footer className="max-w-5xl mx-auto w-full border-t border-slate-950 py-6 mt-16 text-center text-xs text-slate-600">
-        <p>&copy; KeySpeed Sync. Pedagogy & Engineering Integration.</p>
+        <p>&copy; Key-Loop. Pedagogy & Engineering Integration.</p>
       </footer>
     </div>
   );

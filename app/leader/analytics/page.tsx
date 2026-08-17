@@ -23,7 +23,8 @@ import {
   Sparkles,
   ArrowRight,
   TrendingDown,
-  ChevronRight
+  ChevronRight,
+  Loader2
 } from "lucide-react";
 
 export default function LeaderAnalytics() {
@@ -32,6 +33,8 @@ export default function LeaderAnalytics() {
   const [analytics, setAnalytics] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedSessionId, setSelectedSessionId] = useState("");
   
   // Selected student for detailed drill-down modal
   const [selectedStudent, setSelectedStudent] = useState<any | null>(null);
@@ -61,7 +64,11 @@ export default function LeaderAnalytics() {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.get<ApiResponse>(`/groups/${groupId}/analytics`);
+      const params = new URLSearchParams();
+      if (selectedDate) params.set("date", selectedDate);
+      if (selectedSessionId) params.set("sessionId", selectedSessionId);
+      const query = params.toString();
+      const response = await api.get<ApiResponse>(`/groups/${groupId}/analytics${query ? `?${query}` : ""}`);
       setAnalytics(response.data.data);
     } catch (err: any) {
       setError(err.friendlyMessage || "Failed to load group analytics");
@@ -76,7 +83,7 @@ export default function LeaderAnalytics() {
     } else {
       setAnalytics(null);
     }
-  }, [selectedGroupId]);
+  }, [selectedGroupId, selectedDate, selectedSessionId]);
 
   // Remove member from group
   const handleRemoveStudent = async (studentUserId: string, name: string) => {
@@ -164,6 +171,10 @@ export default function LeaderAnalytics() {
     }))
     ?.sort((a: any, b: any) => b.wpm - a.wpm) || [];
 
+  const selectedStudentView = selectedStudent && analytics?.students
+    ? analytics.students.find((student: any) => student.userId === selectedStudent.userId) || selectedStudent
+    : selectedStudent;
+
   return (
     <DashboardShell>
       <div className="space-y-8">
@@ -179,21 +190,68 @@ export default function LeaderAnalytics() {
             </p>
           </div>
 
-          {/* Group Selector Dropdown */}
-          <div className="flex items-center space-x-3 bg-slate-900/60 p-1.5 border border-panel-border rounded-xl max-w-xs w-full md:w-auto">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 pl-3">Group:</span>
-            <select
-              className="bg-transparent text-sm text-white focus:outline-none pr-8 py-1.5 font-bold cursor-pointer w-full md:w-auto"
-              value={selectedGroupId}
-              onChange={(e) => setSelectedGroupId(e.target.value)}
-            >
-              <option value="" disabled className="bg-background text-slate-500">Select a group</option>
-              {groups.map((g) => (
-                <option key={g._id} value={g._id} className="bg-background text-white">
-                  {g.name}
-                </option>
-              ))}
-            </select>
+          {/* Analytics Filters */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:w-auto">
+            <div className="flex items-center space-x-3 bg-slate-900/60 p-1.5 border border-panel-border rounded-xl">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 pl-3">Group:</span>
+              <select
+                className="bg-transparent text-sm text-white focus:outline-none pr-8 py-1.5 font-bold cursor-pointer w-full"
+                value={selectedGroupId}
+                onChange={(e) => {
+                  setSelectedGroupId(e.target.value);
+                  setSelectedDate("");
+                  setSelectedSessionId("");
+                }}
+              >
+                <option value="" disabled className="bg-background text-slate-500">Select a group</option>
+                {groups.map((g) => (
+                  <option key={g._id} value={g._id} className="bg-background text-white">
+                    {g.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center space-x-3 bg-slate-900/60 p-1.5 border border-panel-border rounded-xl">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 pl-3">Date:</span>
+              <select
+                className="bg-transparent text-sm text-white focus:outline-none pr-8 py-1.5 font-bold cursor-pointer w-full"
+                value={selectedDate}
+                onChange={(e) => {
+                  setSelectedDate(e.target.value);
+                  setSelectedSessionId("");
+                }}
+                disabled={!analytics?.filters?.availableDates?.length}
+              >
+                <option value="" className="bg-background text-white">All dates</option>
+                {analytics?.filters?.availableDates?.map((dateValue: string) => (
+                  <option key={dateValue} value={dateValue} className="bg-background text-white">
+                    {new Date(`${dateValue}T00:00:00`).toLocaleDateString()}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center space-x-3 bg-slate-900/60 p-1.5 border border-panel-border rounded-xl">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 pl-3">Session:</span>
+              <select
+                className="bg-transparent text-sm text-white focus:outline-none pr-8 py-1.5 font-bold cursor-pointer w-full"
+                value={selectedSessionId}
+                onChange={(e) => {
+                  setSelectedSessionId(e.target.value);
+                  const sessionDate = analytics?.filters?.sessions?.find((session: any) => session.id === e.target.value)?.date;
+                  if (sessionDate) setSelectedDate(sessionDate);
+                }}
+                disabled={!analytics?.filters?.sessions?.length}
+              >
+                <option value="" className="bg-background text-white">All sessions</option>
+                {analytics?.filters?.sessions
+                  ?.filter((session: any) => !selectedDate || session.date === selectedDate)
+                  .map((session: any) => (
+                    <option key={session.id} value={session.id} className="bg-background text-white">
+                      {session.label}
+                    </option>
+                  ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -221,7 +279,7 @@ export default function LeaderAnalytics() {
         {analytics && !loading && (
           <div className="space-y-8">
             {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
               <Card hoverable className="relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-[3px] bg-brand" />
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -267,6 +325,18 @@ export default function LeaderAnalytics() {
                 <CardContent>
                   <div className="text-3xl font-black text-white">{analytics.stats.groupAvgAccuracy}%</div>
                   <p className="text-xs text-slate-400 mt-1">Average accuracy rate</p>
+                </CardContent>
+              </Card>
+
+              <Card hoverable className="relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-[3px] bg-cyan-500" />
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-500">Net Speed</CardTitle>
+                  <TrendingUp className="h-4 w-4 text-cyan-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-black text-white">{analytics.stats.groupAvgNetSpeed || 0} WPM</div>
+                  <p className="text-xs text-slate-400 mt-1">Accuracy-adjusted speed</p>
                 </CardContent>
               </Card>
             </div>
@@ -392,7 +462,10 @@ export default function LeaderAnalytics() {
                             <TableHead>Skill Level</TableHead>
                             <TableHead className="text-center">Tests</TableHead>
                             <TableHead className="text-right">Avg WPM</TableHead>
+                            <TableHead className="text-right">Net</TableHead>
                             <TableHead className="text-right">Accuracy</TableHead>
+                            <TableHead className="text-right">Current</TableHead>
+                            <TableHead className="text-right">Previous</TableHead>
                             <TableHead className="text-center">Trend</TableHead>
                             <TableHead className="text-right pr-6">Actions</TableHead>
                           </TableRow>
@@ -430,8 +503,17 @@ export default function LeaderAnalytics() {
                                   <TableCell className="text-right font-black text-white">
                                     {student.avgWpm > 0 ? `${student.avgWpm} WPM` : "-"}
                                   </TableCell>
+                                  <TableCell className="text-right font-bold text-cyan-300">
+                                    {student.avgNetSpeed > 0 ? `${student.avgNetSpeed} WPM` : "-"}
+                                  </TableCell>
                                   <TableCell className="text-right font-bold text-slate-300">
                                     {student.avgAccuracy > 0 ? `${student.avgAccuracy}%` : "-"}
+                                  </TableCell>
+                                  <TableCell className="text-right text-xs text-slate-300">
+                                    {student.currentRecord ? `${student.currentRecord.wpm} WPM / ${student.currentRecord.accuracy}%` : "-"}
+                                  </TableCell>
+                                  <TableCell className="text-right text-xs text-slate-500">
+                                    {student.previousRecord ? `${student.previousRecord.wpm} WPM / ${student.previousRecord.accuracy}%` : "-"}
                                   </TableCell>
                                   <TableCell className="text-center">
                                     {student.improvement > 0 ? (
@@ -486,19 +568,19 @@ export default function LeaderAnalytics() {
       </div>
 
       {/* Drill-down Roster Detailed Modal */}
-      {selectedStudent && (
+      {selectedStudentView && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
           <div className="relative w-full max-w-4xl glass border border-panel-border rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-panel-border bg-background/80">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                  <span>{selectedStudent.name}'s Profile</span>
-                  <Badge variant="outline" className={`text-[10px] uppercase font-bold py-0.5 px-2 ${getSkillBadgeColor(selectedStudent.skillLevel)}`}>
-                    {selectedStudent.skillLevel}
+                  <span>{selectedStudentView.name}'s Profile</span>
+                  <Badge variant="outline" className={`text-[10px] uppercase font-bold py-0.5 px-2 ${getSkillBadgeColor(selectedStudentView.skillLevel)}`}>
+                    {selectedStudentView.skillLevel}
                   </Badge>
                 </h2>
-                <p className="text-slate-400 text-xs font-mono mt-0.5">{selectedStudent.email}</p>
+                <p className="text-slate-400 text-xs font-mono mt-0.5">{selectedStudentView.email}</p>
               </div>
               <button 
                 onClick={() => setSelectedStudent(null)}
@@ -511,18 +593,51 @@ export default function LeaderAnalytics() {
             {/* Modal Content */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {/* Overall Summary Row */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div className="bg-slate-900/40 border border-panel-border rounded-xl p-4 text-center">
                   <p className="text-[10px] uppercase font-bold text-slate-500">Max WPM</p>
-                  <p className="text-2xl font-black text-brand-light mt-1">{selectedStudent.maxWpm || "-"}</p>
+                  <p className="text-2xl font-black text-brand-light mt-1">{selectedStudentView.maxWpm || "-"}</p>
                 </div>
                 <div className="bg-slate-900/40 border border-panel-border rounded-xl p-4 text-center">
                   <p className="text-[10px] uppercase font-bold text-slate-500">Average WPM</p>
-                  <p className="text-2xl font-black text-brand-light mt-1">{selectedStudent.avgWpm || "-"}</p>
+                  <p className="text-2xl font-black text-brand-light mt-1">{selectedStudentView.avgWpm || "-"}</p>
                 </div>
                 <div className="bg-slate-900/40 border border-panel-border rounded-xl p-4 text-center">
                   <p className="text-[10px] uppercase font-bold text-slate-500">Avg Accuracy</p>
-                  <p className="text-2xl font-black text-brand-light mt-1">{selectedStudent.avgAccuracy > 0 ? `${selectedStudent.avgAccuracy}%` : "-"}</p>
+                  <p className="text-2xl font-black text-brand-light mt-1">{selectedStudentView.avgAccuracy > 0 ? `${selectedStudentView.avgAccuracy}%` : "-"}</p>
+                </div>
+                <div className="bg-slate-900/40 border border-panel-border rounded-xl p-4 text-center">
+                  <p className="text-[10px] uppercase font-bold text-slate-500">Avg Net Speed</p>
+                  <p className="text-2xl font-black text-cyan-300 mt-1">{selectedStudentView.avgNetSpeed || "-"}</p>
+                </div>
+                <div className="bg-slate-900/40 border border-panel-border rounded-xl p-4 text-center">
+                  <p className="text-[10px] uppercase font-bold text-slate-500">Progress</p>
+                  <p className={`text-2xl font-black mt-1 ${(selectedStudentView.progress?.wpm || 0) >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                    {(selectedStudentView.progress?.wpm || 0) > 0 ? "+" : ""}{selectedStudentView.progress?.wpm || 0}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-slate-900/30 border border-panel-border rounded-xl p-4">
+                  <p className="text-[10px] uppercase font-bold text-slate-500 mb-2">Current Performance Record</p>
+                  {selectedStudentView.currentRecord ? (
+                    <p className="text-sm text-slate-300">
+                      {new Date(selectedStudentView.currentRecord.startedAt).toLocaleString()} - {selectedStudentView.currentRecord.wpm} WPM, {selectedStudentView.currentRecord.accuracy}% accuracy, {selectedStudentView.currentRecord.netSpeed} net
+                    </p>
+                  ) : (
+                    <p className="text-sm text-slate-500 italic">No current record yet.</p>
+                  )}
+                </div>
+                <div className="bg-slate-900/30 border border-panel-border rounded-xl p-4">
+                  <p className="text-[10px] uppercase font-bold text-slate-500 mb-2">Previous Performance Record</p>
+                  {selectedStudentView.previousRecord ? (
+                    <p className="text-sm text-slate-300">
+                      {new Date(selectedStudentView.previousRecord.startedAt).toLocaleString()} - {selectedStudentView.previousRecord.wpm} WPM, {selectedStudentView.previousRecord.accuracy}% accuracy, {selectedStudentView.previousRecord.netSpeed} net
+                    </p>
+                  ) : (
+                    <p className="text-sm text-slate-500 italic">No previous record yet.</p>
+                  )}
                 </div>
               </div>
 
@@ -535,10 +650,10 @@ export default function LeaderAnalytics() {
                     WPM Performance Trend
                   </h3>
                   <div className="h-64">
-                    {selectedStudent.history.length > 0 ? (
+                    {selectedStudentView.history.length > 0 ? (
                       <WpmProgressChart 
-                        data={selectedStudent.history.map((h: any, idx: number) => ({
-                          label: `Test ${idx + 1}`,
+                        data={selectedStudentView.history.map((h: any, idx: number) => ({
+                          label: h.sessionLabel || `Test ${idx + 1}`,
                           wpm: h.wpm
                         }))} 
                       />
@@ -557,10 +672,10 @@ export default function LeaderAnalytics() {
                     Accuracy Trend
                   </h3>
                   <div className="h-64">
-                    {selectedStudent.history.length > 0 ? (
+                    {selectedStudentView.history.length > 0 ? (
                       <AccuracyTrendChart 
-                        data={selectedStudent.history.map((h: any, idx: number) => ({
-                          label: `Test ${idx + 1}`,
+                        data={selectedStudentView.history.map((h: any, idx: number) => ({
+                          label: h.sessionLabel || `Test ${idx + 1}`,
                           accuracy: h.accuracy
                         }))} 
                       />
@@ -579,7 +694,7 @@ export default function LeaderAnalytics() {
                   <History className="h-4 w-4 text-slate-400 mr-2" />
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Detailed Practice History</span>
                 </div>
-                {selectedStudent.history.length === 0 ? (
+                {selectedStudentView.history.length === 0 ? (
                   <div className="p-8 text-center text-slate-500 italic text-sm">
                     This student hasn't submitted any live typing test results yet.
                   </div>
@@ -590,11 +705,12 @@ export default function LeaderAnalytics() {
                         <TableHead>Test Number</TableHead>
                         <TableHead>Date / Time</TableHead>
                         <TableHead className="text-right">Speed (WPM)</TableHead>
+                        <TableHead className="text-right">Net Speed</TableHead>
                         <TableHead className="text-right">Accuracy</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {selectedStudent.history
+                      {selectedStudentView.history
                         .slice()
                         .reverse()
                         .map((entry: any, index: number, arr: any[]) => (
@@ -608,6 +724,9 @@ export default function LeaderAnalytics() {
                             </TableCell>
                             <TableCell className="text-right font-black text-white">
                               {entry.wpm} WPM
+                            </TableCell>
+                            <TableCell className="text-right font-bold text-cyan-300">
+                              {entry.netSpeed} WPM
                             </TableCell>
                             <TableCell className="text-right font-bold text-slate-300">
                               {entry.accuracy}%
@@ -624,7 +743,7 @@ export default function LeaderAnalytics() {
             <div className="flex items-center justify-between p-6 border-t border-panel-border bg-background/80">
               <Button
                 variant="destructive"
-                onClick={() => handleRemoveStudent(selectedStudent.userId, selectedStudent.name)}
+                onClick={() => handleRemoveStudent(selectedStudentView.userId, selectedStudentView.name)}
               >
                 <UserMinus className="h-4 w-4 mr-2" /> Remove Student from Group
               </Button>

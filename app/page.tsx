@@ -252,7 +252,7 @@ export default function LandingPage() {
                 margin: "0 0 36px",
               }}
             >
-              TypeCore brings admins, team leaders, and students into one unified system — track progress, run tests, and build typing excellence across your organization.
+              Key-Loop brings admins, team leaders, and students into one unified system — track progress, run tests, and build typing excellence across your organization.
             </p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Link
@@ -437,7 +437,7 @@ export default function LandingPage() {
           color: "#9a8c70",
         }}
       >
-        © {new Date().getFullYear()} TypeCore. Built with Next.js & Socket.IO. All Rights Reserved.
+        © {new Date().getFullYear()} Key-Loop. Built with Next.js & Socket.IO. All Rights Reserved.
       </footer>
     </div>
   );

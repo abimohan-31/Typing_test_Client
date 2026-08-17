@@ -6,6 +6,7 @@ import { useSocketStore } from "../store/useSocketStore";
 import { useTypingStore } from "../store/useTypingStore";
 import { useAuthStore } from "../store/useAuthStore";
 import { useRouter } from "next/navigation";
+import { toast } from "../components/ui/toast";
 
 export default function SocketProvider({
   children,
@@ -51,9 +52,17 @@ export default function SocketProvider({
       if (data.sessionId) {
         socket.emit("joinSession", data.sessionId);
       }
+    }
 
+    function onSessionNotification(data: { message?: string; href?: string }) {
       if (user?.role === "student") {
-        router.push("/student/test");
+        toast({
+          message: data.message || "A new Key-Loop typing session has started.",
+          action: {
+            label: "Open session",
+            onClick: () => router.push(data.href || "/student/test"),
+          },
+        });
       }
     }
 
@@ -102,6 +111,7 @@ export default function SocketProvider({
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("sessionStarted", onSessionStarted);
+    socket.on("sessionNotification", onSessionNotification);
     socket.on("timerSync", onTimerSync);
     socket.on("sessionUpdate", onSessionUpdate);
     socket.on("newResult", onNewResult);
@@ -116,6 +126,7 @@ export default function SocketProvider({
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("sessionStarted", onSessionStarted);
+      socket.off("sessionNotification", onSessionNotification);
       socket.off("timerSync", onTimerSync);
       socket.off("sessionUpdate", onSessionUpdate);
       socket.off("newResult", onNewResult);

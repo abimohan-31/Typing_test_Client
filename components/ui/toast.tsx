@@ -6,15 +6,32 @@ import { CheckCircle2, X } from "lucide-react";
 type Toast = {
   id: number;
   message: string;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
 };
 
 const TOAST_EVENT = "app-toast";
 const TOAST_DURATION = 3000;
+const ACTION_TOAST_DURATION = 8000;
 
-export function toast(message: string) {
+type ToastInput =
+  | string
+  | {
+      message: string;
+      action?: {
+        label: string;
+        onClick: () => void;
+      };
+    };
+
+export function toast(input: ToastInput) {
+  const detail = typeof input === "string" ? { message: input } : input;
+
   window.dispatchEvent(
-    new CustomEvent<string>(TOAST_EVENT, {
-      detail: message,
+    new CustomEvent<Omit<Toast, "id">>(TOAST_EVENT, {
+      detail,
     })
   );
 }
@@ -24,14 +41,14 @@ export function Toaster() {
 
   useEffect(() => {
     const handleToast = (event: Event) => {
-      const message = (event as CustomEvent<string>).detail;
+      const detail = (event as CustomEvent<Omit<Toast, "id">>).detail;
       const id = Date.now();
 
-      setToasts((current) => [...current, { id, message }]);
+      setToasts((current) => [...current, { id, ...detail }]);
 
       window.setTimeout(() => {
         setToasts((current) => current.filter((item) => item.id !== id));
-      }, TOAST_DURATION);
+      }, detail.action ? ACTION_TOAST_DURATION : TOAST_DURATION);
     };
 
     window.addEventListener(TOAST_EVENT, handleToast);
@@ -53,6 +70,18 @@ export function Toaster() {
         >
           <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
           <p className="min-w-0 flex-1 leading-5">{item.message}</p>
+          {item.action && (
+            <button
+              type="button"
+              className="shrink-0 rounded-md border border-brand/30 px-2 py-1 text-xs font-semibold text-brand-light transition-colors hover:bg-brand/10"
+              onClick={() => {
+                item.action?.onClick();
+                setToasts((current) => current.filter((toast) => toast.id !== item.id));
+              }}
+            >
+              {item.action.label}
+            </button>
+          )}
           <button
             type="button"
             aria-label="Dismiss notification"

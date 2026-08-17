@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "primary" | "secondary" | "success" | "destructive" | "warning" | "leader" | "student" | "admin";
+  variant?: "primary" | "secondary" | "outline" | "success" | "destructive" | "warning" | "leader" | "student" | "admin";
 }
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -19,7 +19,8 @@ export const Badge: React.FC<BadgeProps> = ({
           {
             "bg-brand/10 text-brand-light border-brand/20": variant === "primary",
             "bg-panel-surface text-muted-foreground border-panel-border": variant === "secondary",
-            "bg-role-student/10 text-role-student border-role-student/20": variant === "success",
+            "bg-transparent text-muted-foreground border-panel-border": variant === "outline",
+            "bg-emerald-500/10 text-emerald-400 border-emerald-500/20": variant === "success",
             "bg-destructive/10 text-destructive border-destructive/20": variant === "destructive",
             "bg-warning/10 text-warning border-warning/20": variant === "warning",
             "bg-role-leader/10 text-role-leader border-role-leader/20": variant === "leader",

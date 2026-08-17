@@ -25,6 +25,7 @@ export default function TypingTestArea() {
   const [finalResult, setFinalResult] = useState<{
     wpm: number;
     accuracy: number;
+    netSpeed?: number;
   } | null>(null);
 
   // If there's no active session, send them back to the waiting room
@@ -95,7 +96,7 @@ export default function TypingTestArea() {
           });
 
           if (isMounted) {
-            const result = response.data.data as { wpm: number; accuracy: number };
+            const result = response.data.data as { wpm: number; accuracy: number; netSpeed?: number };
             setFinalResult(result);
 
             // Persist for the dedicated result page.
@@ -120,6 +121,7 @@ export default function TypingTestArea() {
               userName: profileName || "Student",
               wpm: result.wpm,
               accuracy: result.accuracy,
+              netSpeed: result.netSpeed,
             });
 
             // Move to results page (student portal).
@@ -312,6 +314,14 @@ export default function TypingTestArea() {
                         {finalResult.accuracy}%
                       </p>
                     </div>
+                    <div className="text-center bg-cyan-500/10 p-6 rounded-2xl border border-cyan-500/30 w-40 shadow-lg shadow-cyan-500/10">
+                      <p className="text-sm text-slate-400 uppercase tracking-wider mb-2">
+                        Net Speed
+                      </p>
+                      <p className="text-4xl font-black text-cyan-300">
+                        {finalResult.netSpeed ?? Math.round(finalResult.wpm * (finalResult.accuracy / 100))}
+                      </p>
+                    </div>
                   </div>
                 ) : null}
 
@@ -327,7 +337,7 @@ export default function TypingTestArea() {
 
             {/* Subtle background text effect */}
             <div className="absolute inset-0 opacity-[0.02] pointer-events-none select-none overflow-hidden font-mono text-[10rem] font-black leading-none break-all p-4">
-              TYPINGTEST ARENA SYSTEM ACTIVE
+              KEY-LOOP ARENA SYSTEM ACTIVE
             </div>
 
             <div className="select-none pointer-events-none relative z-0 mt-8 leading-relaxed">

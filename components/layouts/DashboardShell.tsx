@@ -78,9 +78,9 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
           </div>
           <div>
             <h1 className="text-md font-bold bg-gradient-to-r from-white via-brand-light/50 to-brand-light bg-clip-text text-transparent">
-              KeySpeed Sync
+              Key-Loop
             </h1>
-            <p className="text-[10px] text-slate-500 font-semibold tracking-widest uppercase">Typing Hub</p>
+            <p className="text-[10px] text-slate-500 font-semibold tracking-widest uppercase">Key-Loop Hub</p>
           </div>
         </div>
 
@@ -186,7 +186,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ children }) => {
             <div className="flex items-center justify-between pb-6 border-b border-panel-border">
               <div className="flex items-center space-x-2">
                 <Keyboard className="h-6 w-6 text-brand" />
-                <span className="text-md font-bold text-white">KeySpeed Sync</span>
+                <span className="text-md font-bold text-white">Key-Loop</span>
               </div>
               <Button
                 variant="ghost"

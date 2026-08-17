@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { DashboardShell } from "../../../components/layouts/DashboardShell";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
-import { Trophy, Gauge, Target, ArrowRight } from "lucide-react";
+import { Trophy, Gauge, Target, ArrowRight, TrendingUp } from "lucide-react";
 
 type LastTypingResult = {
   wpm: number;
   accuracy: number;
+  netSpeed?: number;
   sessionId?: string;
   completedAt?: string;
 };
@@ -74,7 +75,7 @@ export default function StudentResultPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-[3px] bg-brand" />
               <CardHeader>
@@ -101,7 +102,22 @@ export default function StudentResultPage() {
               </CardContent>
             </Card>
 
-            <div className="md:col-span-2 flex gap-3">
+            <Card className="relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-cyan-500" />
+              <CardHeader>
+                <CardTitle className="text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-cyan-300" /> Net Speed
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-5xl font-black text-white">
+                  {result.netSpeed ?? Math.round(result.wpm * (result.accuracy / 100))}
+                  <span className="text-lg text-slate-500"> WPM</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="md:col-span-3 flex gap-3">
               <Button onClick={handleTryAgain}>Join Another Session</Button>
               <Button variant="outline" onClick={handleBackToDashboard}>
                 Student Dashboard
@@ -113,4 +129,3 @@ export default function StudentResultPage() {
     </DashboardShell>
   );
 }
-
